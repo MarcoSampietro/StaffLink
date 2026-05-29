@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # 1. DATABASE MYSQL
+  db:
+    image: mysql:8.0
+    container_name: stafflink-db
+    restart: always
+    environment:
+      # Inietta le variabili del tuo .env nel container MySQL
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} # Configura la password di root uguale a DB_PASSWORD per semplicità
+    ports:
+      # Mappa la porta esterna usando il valore del tuo .env (es. 3306 o 3307)
+      - "${DB_PORT}:3306"
+    volumes:
+      # Persistenza dei dati e inizializzazione automatica dello schema
+      - ./infrastructure/mysql/data:/var/lib/mysql
+      - ./infrastructure/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - stafflink-network
+
+  # 2. KEYCLOAK (Identity & Access Management)
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: stafflink-keycloak
+    command: start-dev --import-realm
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      
+      # Configurazioni Proxy per GitHub Codespaces
+      KC_PROXY_HEADERS: xforwarded
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+    ports:
+      - "8080:8080"
+    volumes:
+      # Importazione automatica del Realm configurato
+      - ./infrastructure/keycloak/realm-export.json:/opt/keycloak/data/import/realm.json
+    depends_on:
+      - db
+    networks:
+      - stafflink-network
+
+# Rete isolata per far comunicare i container tra loro
+networks:
+  stafflink-network:
+    driver: bridge
