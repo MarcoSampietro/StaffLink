@@ -1,5 +1,6 @@
 import os
 from flask import Flask, jsonify
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 
@@ -7,6 +8,7 @@ from routes import auth_bp, turni_bp, admin_bp
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True, allow_headers=["Content-Type", "Authorization"])
 
 # Configurazione JWT (La chiave segreta deve essere complessa in produzione)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'chiave-super-segreta-stafflink')
