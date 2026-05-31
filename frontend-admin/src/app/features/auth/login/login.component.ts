@@ -4,31 +4,16 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { environment } from '../../../../environments/environments';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <div style="max-width: 400px; margin: 100px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-      <h2>Accesso StaffLink Arena</h2>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div style="margin-bottom: 15px;">
-          <label>Username</label>
-          <input type="text" formControlName="username" style="width: 100%; padding: 8px;">
-        </div>
-        <div style="margin-bottom: 15px;">
-          <label>Password</label>
-          <input type="password" formControlName="password" style="width: 100%; padding: 8px;">
-        </div>
-        @if (errore) { <p style="color: red;">Credenziali non valide.</p> }
-        <button type="submit" [disabled]="loginForm.invalid || inCaricamento" style="width: 100%; padding: 10px; background: #0056b3; color: white;">
-          {{ inCaricamento ? 'Accesso in corso...' : 'Entra' }}
-        </button>
-      </form>
-    </div>
-  `
+  templateUrl: './login.component.html'
 })
+
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
@@ -45,7 +30,7 @@ export class LoginComponent {
 
     const body = new HttpParams().set('client_id', 'stafflink-frontend').set('username', username!).set('password', password!).set('grant_type', 'password');
 
-    this.http.post<any>('https://shiny-space-tribble-r475w47gr569cxgpp-8080.app.github.dev/realms/stafflink-arena/protocol/openid-connect/token', body.toString(), {
+    this.http.post<any>(`${environment.keycloakUrl}/realms/stafflink-arena/protocol/openid-connect/token`, body.toString(), {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     }).subscribe({
       next: (res) => {
@@ -53,7 +38,7 @@ export class LoginComponent {
         const ruolo = payload.realm_access?.roles.includes('admin') ? 'admin' : payload.realm_access?.roles.includes('organizzatore') ? 'organizzatore' : 'steward';
         this.authService.loginSuccess(res.access_token, ruolo);
 
-        this.http.post('https://shiny-space-tribble-r475w47gr569cxgpp-5000.app.github.dev/api/auth/sync', {}).subscribe(() => {
+        this.http.post(`${environment.backendUrl}/api/auth/sync`, {}).subscribe(() => {
           this.inCaricamento = false;
           if (ruolo === 'admin') this.router.navigate(['/admin-panel']);
           else if (ruolo === 'organizzatore') this.router.navigate(['/dashboard-organizzatore']);

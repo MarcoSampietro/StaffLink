@@ -2669,5 +2669,61 @@
   },
   "clientPolicies": {
     "policies": []
-  }
+  },
+  "users": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "username": "mario.rossi",
+      "enabled": true,
+      "email": "mario@example.com",
+      "firstName": "Mario",
+      "lastName": "Rossi",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "1234",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "steward"
+      ]
+    },
+    {
+      "id": "11111111-2222-2222-2222-111111111111",
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@example.com",
+      "firstName": "admin",
+      "lastName": "1",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "admin"
+      ]
+    },
+    {
+      "id": "11111111-3333-3333-3333-111111111111",
+      "username": "organizzatore",
+      "enabled": true,
+      "email": "organizzatore@example.com",
+      "firstName": "organizzatore",
+      "lastName": "1",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "1234",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "organizzatore"
+      ]
+    }
+  ]
 }

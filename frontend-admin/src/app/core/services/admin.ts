@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { environment } from '../../../environments/environments';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class AdminService {
   private http = inject(HttpClient);
   
   // Link corretto al cloud
-  private baseUrl = 'https://shiny-space-tribble-r475w47gr569cxgpp-5000.app.github.dev/api/admin';
+  private baseUrl = `${environment.backendUrl}/api/admin`;
 
   public utenti = signal<any[]>([]);
 

@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environments';
 
 export interface Utente {
   id_utente: string; cognome: string; nome: string; email: string; ruolo: string;
@@ -12,7 +13,7 @@ export interface StatisticheDashboard {
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://shiny-space-tribble-r475w47gr569cxgpp-5000.app.github.dev/api/admin';
+  private apiUrl = `${environment.backendUrl}/api/admin`;
 
   private utentiState = signal<Utente[]>([]);
   private statsState = signal<StatisticheDashboard | null>(null);
