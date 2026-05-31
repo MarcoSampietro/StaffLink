@@ -1,0 +1,41 @@
+<div class="dashboard-container">
+  <div class="header-section">
+    <h1>Dashboard Evento</h1>
+    <p class="subtitle">Panoramica in tempo reale delle statistiche dell'Arena</p>
+  </div>
+  @if (adminService.statistiche(); as stats) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon copertura-icon">👥</div>
+        <div class="stat-content">
+          <h3>Copertura Personale</h3>
+          <div class="stat-numbers"><span class="value">{{ stats.steward_confermati }}</span> / <span class="total">{{ stats.posti_totali_richiesti }}</span></div>
+          <div class="progress-bar-container"><div class="progress-bar" [style.width.%]="(stats.steward_confermati / stats.posti_totali_richiesti) * 100"></div></div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon rating-icon">⭐</div>
+        <div class="stat-content">
+          <h3>Rating Medio</h3>
+          <div class="stat-numbers"><span class="value">{{ stats.rating_medio }}</span> <span class="total">/ 5.0</span></div>
+          <p class="stat-desc">Valutazione degli steward</p>
+        </div>
+      </div>
+    </div>
+  } @else { <div class="loading-state"><p>Caricamento statistiche...</p></div> }
+</div>
+<style>
+  .dashboard-container { padding: 30px; max-width: 1200px; margin: 0 auto; font-family: 'Segoe UI', sans-serif; }
+  .header-section { margin-bottom: 40px; }
+  .header-section h1 { color: #2c3e50; margin-bottom: 8px; font-size: 28px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+  .stat-card { background: white; border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 24px; border: 1px solid #f1f3f5; }
+  .stat-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 28px; }
+  .copertura-icon { background: #e3f2fd; color: #1976d2; }
+  .rating-icon { background: #fff8e1; color: #f57c00; }
+  .stat-content { flex: 1; }
+  .stat-numbers { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+  .stat-numbers .value { font-size: 36px; font-weight: 700; color: #2c3e50; }
+  .progress-bar-container { height: 6px; background: #e9ecef; border-radius: 3px; width: 100%; }
+  .progress-bar { height: 100%; background: #007bff; border-radius: 3px; }
+</style>

@@ -1,0 +1,30 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2 class="login-title">Accesso StaffLink Arena</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="input-group">
+        <label>Username</label>
+        <input type="text" formControlName="username" placeholder="Inserisci il tuo username">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" placeholder="Inserisci la tua password">
+      </div>
+      @if (errore) { <div class="error-message">⚠️ Credenziali non valide. Riprova.</div> }
+      <button type="submit" [disabled]="loginForm.invalid || inCaricamento" class="btn-primary">
+        {{ inCaricamento ? 'Accesso in corso...' : 'Entra' }}
+      </button>
+    </form>
+  </div>
+</div>
+<style>
+  .login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+  .login-card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 400px; }
+  .login-title { text-align: center; color: #2c3e50; margin-bottom: 30px; font-weight: 700; font-size: 24px; }
+  .input-group { margin-bottom: 24px; }
+  .input-group label { display: block; margin-bottom: 8px; color: #495057; font-size: 14px; font-weight: 600; }
+  .input-group input { width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
+  .btn-primary { width: 100%; padding: 14px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+  .btn-primary:disabled { background: #b3d7ff; cursor: not-allowed; }
+  .error-message { background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; text-align: center; font-weight: 500; }
+</style>

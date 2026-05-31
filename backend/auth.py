@@ -5,7 +5,7 @@ import requests
 import os
 
 # Il link verrà inserito manualmente dopo
-KEYCLOAK_URL = "https://probable-robot-976vr44jr9663xgjw-8080.app.github.dev"
+KEYCLOAK_URL = "https://stunning-engine-x5r67qqgrjjj2v4r5-8080.app.github.dev"
 REALM = "stafflink-arena"
 CLIENT_ID = "stafflink-frontend"
 

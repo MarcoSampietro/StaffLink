@@ -1,11 +1,9 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
-import { environment } from '../../../environments/environments';
+import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AdminService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.backendUrl}/api/admin`;
@@ -21,9 +19,7 @@ export class AdminService {
 
   modificaRuoloUtente(id_utente: string, nuovo_ruolo: string) {
     return this.http.put(`${this.baseUrl}/utenti/${id_utente}/ruolo`, { ruolo: nuovo_ruolo }).pipe(
-      tap(() => {
-        this.caricaUtenti().subscribe();
-      })
+      tap(() => this.caricaUtenti().subscribe())
     );
   }
 
