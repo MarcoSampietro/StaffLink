@@ -45,7 +45,7 @@ export class LoginComponent {
 
     const body = new HttpParams().set('client_id', 'stafflink-frontend').set('username', username!).set('password', password!).set('grant_type', 'password');
 
-    this.http.post<any>('https://reimagined-robot-5gv6jppxjqp5h76pq-8080.app.github.dev/realms/stafflink-arena/protocol/openid-connect/token', body.toString(), {
+    this.http.post<any>('https://shiny-space-tribble-r475w47gr569cxgpp-8080.app.github.dev/realms/stafflink-arena/protocol/openid-connect/token', body.toString(), {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     }).subscribe({
       next: (res) => {
@@ -53,7 +53,7 @@ export class LoginComponent {
         const ruolo = payload.realm_access?.roles.includes('admin') ? 'admin' : payload.realm_access?.roles.includes('organizzatore') ? 'organizzatore' : 'steward';
         this.authService.loginSuccess(res.access_token, ruolo);
 
-        this.http.post('https://reimagined-robot-5gv6jppxjqp5h76pq-5000.app.github.dev/api/auth/sync', {}).subscribe(() => {
+        this.http.post('https://shiny-space-tribble-r475w47gr569cxgpp-5000.app.github.dev/api/auth/sync', {}).subscribe(() => {
           this.inCaricamento = false;
           if (ruolo === 'admin') this.router.navigate(['/admin-panel']);
           else if (ruolo === 'organizzatore') this.router.navigate(['/dashboard-organizzatore']);

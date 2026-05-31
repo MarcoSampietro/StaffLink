@@ -12,7 +12,7 @@ export interface StatisticheDashboard {
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5000/api/admin';
+  private apiUrl = 'https://shiny-space-tribble-r475w47gr569cxgpp-5000.app.github.dev/api/admin';
 
   private utentiState = signal<Utente[]>([]);
   private statsState = signal<StatisticheDashboard | null>(null);
