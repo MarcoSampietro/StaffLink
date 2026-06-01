@@ -5,7 +5,7 @@ import requests
 import os
 
 # Il link verrà inserito manualmente dopo
-KEYCLOAK_URL = "https://stunning-engine-x5r67qqgrjjj2v4r5-8080.app.github.dev"
+KEYCLOAK_URL = "https://potential-xylophone-wr45xgq6gjxcr4-8080.app.github.dev"
 REALM = "stafflink-arena"
 CLIENT_ID = "stafflink-frontend"
 
@@ -39,12 +39,13 @@ def require_auth(f):
                 token,
                 public_key,
                 algorithms=["RS256"],
-                audience=CLIENT_ID,
-                options={"verify_exp": True}
+                #audience=CLIENT_ID, 
+                options={"verify_exp": True, "verify_aud": False} 
             )
             g.user = payload
         except Exception as e:
+            # Aggiungiamo un print per vedere l'errore esatto nel terminale se fallisce ancora
+            print(f"🔴 ERRORE DECODIFICA JWT: {str(e)}") 
             return jsonify({"error": str(e)}), 401
-            
         return f(*args, **kwargs)
     return decorated

@@ -101,3 +101,39 @@ class DatabaseWrapper:
         if result:
             return result['capacita_richiesta'] - result['occupati']
         return 0
+
+    def get_dashboard_stats(self, id_evento):
+        query_stats = """
+            SELECT 
+                (SELECT SUM(capacita_richiesta) FROM settore WHERE id_evento = %s) as posti_totali_richiesti,
+                (SELECT COUNT(*) FROM turno_assegnato ta JOIN settore s ON ta.id_settore = s.id_settore WHERE s.id_evento = %s AND ta.stato_candidatura = 'confermato') as steward_confermati,
+                (SELECT AVG(r.rating_scorrevolezza) FROM report_fine_turno r JOIN turno_assegnato ta ON r.id_turno = ta.id_turno JOIN settore s ON ta.id_settore = s.id_settore WHERE s.id_evento = %s) as rating_medio
+        """
+        result = self.fetch_one(query_stats, (id_evento, id_evento, id_evento))
+        return {
+            "rating_medio": float(result['rating_medio']) if result and result['rating_medio'] else 0.0,
+            "posti_totali_richiesti": int(result['posti_totali_richiesti']) if result and result['posti_totali_richiesti'] else 0,
+            "steward_confermati": int(result['steward_confermati']) if result and result['steward_confermati'] else 0
+        }
+
+    def get_turni_disponibili(self, id_steward):
+        query = """
+            SELECT 
+                s.id_settore as id,
+                DATE_FORMAT(e.data_inizio, '%%Y-%%m-%%d') as data_evento,
+                e.titolo as nome_evento,
+                s.nome_settore as settore,
+                DATE_FORMAT(e.data_inizio, '%%H:%%i') as orario_inizio,
+                DATE_FORMAT(e.data_fine, '%%H:%%i') as orario_fine
+            FROM settore s
+            JOIN evento e ON s.id_evento = e.id_evento
+            WHERE s.capacita_richiesta > (
+                SELECT COUNT(*) FROM turno_assegnato 
+                WHERE id_settore = s.id_settore AND stato_candidatura = 'confermato'
+            )
+            AND s.id_settore NOT IN (
+                SELECT id_settore FROM turno_assegnato WHERE id_steward = %s
+            )
+            ORDER BY e.data_inizio ASC
+        """
+        return self.fetch_all(query, (id_steward,))

@@ -27,4 +27,5 @@ def modifica_ruolo(id_utente):
 @ruolo_richiesto('organizzatore', 'admin')
 def get_stats(id_evento):
     if request.method == "OPTIONS": return jsonify({}), 200
-    return jsonify({"rating_medio": 4.5, "posti_totali_richiesti": 100, "steward_confermati": 85}), 200
+    stats = db.get_dashboard_stats(id_evento)
+    return jsonify(stats), 200

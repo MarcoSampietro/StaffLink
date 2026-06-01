@@ -11,5 +11,7 @@ import { StewardService } from '../../../core/services/steward.service';
 export class StewardDashboardComponent implements OnInit {
   public stewardService = inject(StewardService);
   ngOnInit() { this.stewardService.caricaTurni().subscribe(); }
-  accettaTurno(id_turno: number) { alert("Turno accettato!"); }
+  accettaTurno(id_turno: number) { 
+    this.stewardService.accettaTurno(id_turno).subscribe(); 
+  }
 }
